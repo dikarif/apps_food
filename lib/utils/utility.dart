@@ -9,7 +9,7 @@ class Utility {
   final siscomLogo = 'assets/siscom_logo.png';
   // COLOR
   // static Color baseColor = HexColor('#9F0B24');
-  static Color baseColor = HexColor('#59c7ea');
+  static Color baseColor = Colors.orangeAccent;
   static Color baseColor1 = Color(0xff11151e);
   static Color baseColor2 = Color(0xffffffff);
 

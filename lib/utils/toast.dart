@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:apps_food/utility.dart';
+import 'package:apps_food/utils/utility.dart';
 
 class UtilsAlert {
   static showToast(message) {

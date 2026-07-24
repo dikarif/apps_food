@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:apps_food/controller/main_dashboard_controller.dart';
-import 'package:apps_food/utility.dart';
+import 'package:apps_food/utils/utility.dart';
 
 class InitScreen extends StatefulWidget {
   @override

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'package:apps_food/toast.dart';
+import 'package:apps_food/utils/toast.dart';
 
 class DashboardController extends GetxController {
   var tabIndex = 0.obs; // 0 = Home, 1 = Cart, 2 = History, 3 = Profile
