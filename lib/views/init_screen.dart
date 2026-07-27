@@ -21,7 +21,7 @@ class _InitScreenState extends State<InitScreen> {
       // Profile(),
       Container(
         color: Colors.white,
-        child: const Center(child: Text("Halaman Sales")), //sementara
+        child: const Center(child: Text("Riwayat Transaksi")), //sementara
       ),
       Container(
         color: Colors.white,
@@ -52,7 +52,7 @@ class _InitScreenState extends State<InitScreen> {
         inactiveIcon: const Icon(Iconsax.activity4),
         // icon: ImageIcon(AssetImage("assets/activity_fill.png")),
         // inactiveIcon: ImageIcon(AssetImage("assets/activity.png")),
-        title: "Sales Activity",
+        title: "Riwayat Transaksi",
         textStyle: const TextStyle(
           fontSize: 10.0,
           fontWeight: FontWeight.w600,

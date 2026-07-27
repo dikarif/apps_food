@@ -30,6 +30,7 @@ class BerandaController extends GetxController {
   var totalGold = "0.0".obs;
   var totalSilver = "0.0".obs;
   var indexBanner = 0.obs;
+  var heightPageView = 0.0.obs;
 
   var isActiveFilterChart = false.obs;
   var salesmanCodeDefault = "".obs;
@@ -139,6 +140,25 @@ class BerandaController extends GetxController {
 
   //     emailUser.value = dataInformasiUser[0].userEmail ?? "";
   //     emailUser.refresh();
+  //   }
+  // }
+
+  // Future<void> getSizeDevice() async {
+  //   double width = MediaQuery.of(Get.context!).size.width;
+  //   double height = MediaQuery.of(Get.context!).size.height;
+  //   tinggiHp.value = height;
+  //   if (width <= 395.0 || width <= 425.0) {
+  //     print("kesini mobile kecil");
+  //     deviceStatus.value = false;
+  //     heightbanner.value = 120.0;
+  //     heightPageView.value = 155.0;
+  //     ratioDevice.value = 2.0;
+  //   } else if (width >= 425.0) {
+  //     print("kesini mobile besar");
+  //     heightbanner.value = 200.0;
+  //     heightPageView.value = 180.0;
+  //     ratioDevice.value = 3.0;
+  //     deviceStatus.value = true;
   //   }
   // }
 
