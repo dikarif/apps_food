@@ -1,8 +1,10 @@
 import 'package:apps_food/controller/beranda_controller.dart';
 import 'package:apps_food/controller/main_dashboard_controller.dart';
+import 'package:apps_food/models/penjual_models.dart';
 import 'package:flutter/material.dart';
 import 'package:apps_food/models/food_models.dart';
 import 'package:apps_food/controller/food_controller.dart';
+import 'package:apps_food/controller/penjual_controller.dart';
 import 'package:apps_food/utils/widget/card_custom.dart';
 import 'package:apps_food/controller/global_controller.dart';
 import 'package:apps_food/utils/utility.dart';
@@ -23,7 +25,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class BerandaView extends StatelessWidget {
   final FoodController foodController = Get.put(FoodController());
-  // final GlobalController globalC = Get.find<GlobalController>();
+  final penjualcontroller = Get.put(PenjualController());
   final globalC = Get.put(GlobalController());
   final controller = Get.put(BerandaController());
 
@@ -40,554 +42,120 @@ class BerandaView extends StatelessWidget {
           onWillPop: () async {
             return false;
           },
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
+          child: Stack(
+            children: [
+              Container(
+                height: 320,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Utility.baseColor2,
+                  image: const DecorationImage(
+                    alignment: Alignment.topCenter,
+                    image: AssetImage('assets/bg_dashboard2.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+
+              SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 270,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: Utility.baseColor2,
-                        image: DecorationImage(
-                          alignment: Alignment.topCenter,
-                          image: AssetImage('assets/bg_dashboard2.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                    sliderBanner(),
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                      child: screenCaridanFilter(),
                     ),
-                    SafeArea(
-                      child: Column(
-                        children: [
-                          sliderBanner(),
-                          const SizedBox(height: 11),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 12.0,
-                              right: 12.0,
+                    const SizedBox(height: 10),
+
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 12.0,
+                                right: 12.0,
+                              ),
+                              child: menuLine1(),
                             ),
-                            child: screenCaridanFilter(),
-                          ),
-                          const SizedBox(height: 5),
-                          Padding(
-                            // Gunakan angka yang agak besar (misal 16.0) agar terlihat mengecil
-                            padding: const EdgeInsets.only(
-                              left: 12.0,
-                              right: 12.0,
-                            ),
-                            child: CardCustom(
-                              colorBg: Utility.baseColor2,
-                              radiusBorder: Utility.borderStyle3,
-                              borderColor: Utility.infoDark,
-                              widgetCardCustom: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(flex: 15, child: menuLine1()),
-                                ],
+                            const SizedBox(height: 16),
+
+                            // -- Judul Rekomendasi --
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 12.0,
+                                right: 12.0,
+                              ),
+                              child: Text(
+                                "Rekomendasi Special Untuk Kamu",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Utility.large,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                    //   child: Column(
-                    //     children: [
-                    //       SizedBox(height: Utility.extraLarge + Utility.large),
-                    //       Obx(() => Text(controller.username.value)),
+                            const SizedBox(height: 10),
 
-                    //       // userDeskripsi(),
-                    //       SizedBox(height: Utility.normal),
-                    //       // infoCard1(),
-                    //       // sliderBanner(),
-                    //     ],
-                    //   ),
-                    // ),
+                            SizedBox(
+                              height: 190,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0,
+                                ),
+                                itemCount:
+                                    foodController.lismakananarekomen.length,
+                                itemBuilder: (context, index) {
+                                  return cardRekomendasiMakanan(
+                                    foodController.lismakananarekomen[index],
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 12.0,
+                                right: 12.0,
+                              ),
+                              child: Text(
+                                "Restaurant Atau Toko Terdekat",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Utility.large,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+
+                            ListView.builder(
+                              shrinkWrap: true, // Wajib agar tinggi dinamis
+                              physics:
+                                  const NeverScrollableScrollPhysics(), // Wajib agar gabung dengan scroll utama
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0,
+                              ),
+                              itemCount: penjualcontroller.listtoko.length,
+                              itemBuilder: (context, index) {
+                                return cardRestoTerdekat(
+                                  penjualcontroller.listtoko[index],
+                                );
+                              },
+                            ),
+
+                            const SizedBox(height: 32),
+                          ],
+                        ),
+                      ),
+                    ), // Penutup Expanded
                   ],
                 ),
-                // Expanded(
-                //   child: SizedBox(
-                //     height: double.maxFinite,
-                //     child: SmartRefresher(
-                //       physics: const BouncingScrollPhysics(),
-                //       controller: _refreshController,
-                //       onRefresh: _onRefresh,
-                //       child: SingleChildScrollView(
-                //         child: Column(
-                //           crossAxisAlignment: CrossAxisAlignment.start,
-                //           children: [
-                //             SizedBox(height: Utility.medium),
-                //             if (controller.isKollek == 1) ...[
-                //               /// Card Menu
-                //               cardMenu(),
-
-                //               SizedBox(height: Utility.medium),
-                //             ],
-                //             Padding(
-                //               padding: const EdgeInsets.only(
-                //                 left: 16.0,
-                //                 right: 16.0,
-                //                 bottom: 20,
-                //               ),
-                //               child: Column(
-                //                 crossAxisAlignment: CrossAxisAlignment.start,
-                //                 children: [
-                //                   Container(
-                //                     width: MediaQuery.of(context).size.width,
-                //                     child: Row(
-                //                       mainAxisAlignment:
-                //                           MainAxisAlignment.spaceBetween,
-                //                       children: [
-                //                         const Expanded(
-                //                           flex: 50,
-                //                           child: Text(
-                //                             "Dashboard",
-                //                             style: TextStyle(
-                //                               fontWeight: FontWeight.w600,
-                //                               fontSize: 18,
-                //                             ),
-                //                           ),
-                //                         ),
-                //                         Expanded(
-                //                           flex: 20,
-                //                           child: InkWell(
-                //                             onTap: () async {
-                //                               await showModalBottomSheet(
-                //                                 backgroundColor:
-                //                                     Colors.transparent,
-                //                                 isScrollControlled: true,
-                //                                 context: Get.context!,
-                //                                 builder: (context) {
-                //                                   return FractionallySizedBox(
-                //                                     heightFactor: 1,
-                //                                     child: _filterDashboard(),
-                //                                   );
-                //                                 },
-                //                               );
-                //                             },
-                //                             child: Container(
-                //                               decoration: BoxDecoration(
-                //                                 borderRadius:
-                //                                     BorderRadius.circular(4),
-                //                                 border: Border.all(
-                //                                   color: Utility.greyLight200,
-                //                                 ),
-                //                               ),
-                //                               child: Padding(
-                //                                 padding: EdgeInsets.all(8.0),
-                //                                 child: Row(
-                //                                   crossAxisAlignment:
-                //                                       CrossAxisAlignment
-                //                                           .center,
-                //                                   mainAxisAlignment:
-                //                                       MainAxisAlignment
-                //                                           .spaceBetween,
-                //                                   children: [
-                //                                     const Icon(
-                //                                       Iconsax.setting_4,
-                //                                       size: 16,
-                //                                     ),
-                //                                     Flexible(
-                //                                       child: Text(
-                //                                         // "${controller.bulanString.value.toString().substring(0, 3)} ${controller.tahun.value.toString()}",
-                //                                         "Filter",
-                //                                         overflow: TextOverflow
-                //                                             .ellipsis,
-                //                                       ),
-                //                                     ),
-                //                                     ArrowDropdown(),
-                //                                   ],
-                //                                 ),
-                //                               ),
-                //                             ),
-                //                           ),
-                //                         ),
-                //                       ],
-                //                     ),
-                //                   ),
-                //                   SizedBox(height: Utility.medium),
-                //                   if (controller.isKollek == 1) ...[
-                //                     SingleChildScrollView(
-                //                       physics: const BouncingScrollPhysics(),
-                //                       scrollDirection: Axis.horizontal,
-                //                       child: SizedBox(
-                //                         width: 660,
-                //                         child: Row(
-                //                           crossAxisAlignment:
-                //                               CrossAxisAlignment.start,
-                //                           mainAxisAlignment:
-                //                               MainAxisAlignment.start,
-                //                           children: [
-                //                             Expanded(
-                //                               child: Container(
-                //                                 margin: const EdgeInsets.only(
-                //                                   right: 8,
-                //                                 ),
-                //                                 child: Obx(
-                //                                   () => cardDashboard1(
-                //                                     title: "Target Salesman",
-                //                                     amount:
-                //                                         Utility.rupiahFormat(
-                //                                           controller
-                //                                               .targetSales
-                //                                               .toString(),
-                //                                           "",
-                //                                         ),
-                //                                     icon: Iconsax.cup5,
-                //                                   ),
-                //                                 ),
-                //                               ),
-                //                             ),
-                //                             Expanded(
-                //                               child: Container(
-                //                                 margin: const EdgeInsets.only(
-                //                                   right: 8,
-                //                                 ),
-                //                                 child: Obx(
-                //                                   () => cardDashboard1(
-                //                                     title: "Penjualan",
-                //                                     amount:
-                //                                         Utility.rupiahFormat(
-                //                                           controller.penjualan
-                //                                               .toString(),
-                //                                           "",
-                //                                         ),
-                //                                     icon: Iconsax
-                //                                         .shopping_cart5,
-                //                                   ),
-                //                                 ),
-                //                               ),
-                //                             ),
-                //                             Expanded(
-                //                               child: SizedBox(
-                //                                 child: Obx(
-                //                                   () => cardDashboard1(
-                //                                     title: "Piutang Outs",
-                //                                     amount:
-                //                                         Utility.rupiahFormat(
-                //                                           controller.piutang
-                //                                               .toString(),
-                //                                           '',
-                //                                         ),
-                //                                     icon: Iconsax.money_send5,
-                //                                   ),
-                //                                 ),
-                //                               ),
-                //                             ),
-                //                           ],
-                //                         ),
-                //                       ),
-                //                     ),
-                //                     const SizedBox(height: 8),
-                //                     SingleChildScrollView(
-                //                       physics: const BouncingScrollPhysics(),
-                //                       scrollDirection: Axis.horizontal,
-                //                       child: SizedBox(
-                //                         width: 660,
-                //                         child: Row(
-                //                           crossAxisAlignment:
-                //                               CrossAxisAlignment.start,
-                //                           mainAxisAlignment:
-                //                               MainAxisAlignment.start,
-                //                           children: [
-                //                             Expanded(
-                //                               child: Container(
-                //                                 margin: const EdgeInsets.only(
-                //                                   right: 8,
-                //                                 ),
-                //                                 child: Obx(
-                //                                   () => cardDashboard1(
-                //                                     title: "Penerimaan",
-                //                                     amount:
-                //                                         Utility.rupiahFormat(
-                //                                           controller
-                //                                               .penerimaan
-                //                                               .toString(),
-                //                                           '',
-                //                                         ),
-                //                                     icon: Iconsax.money_send5,
-                //                                   ),
-                //                                 ),
-                //                               ),
-                //                             ),
-                //                             Expanded(
-                //                               child: Container(
-                //                                 margin: const EdgeInsets.only(
-                //                                   right: 8,
-                //                                 ),
-                //                                 child: Obx(
-                //                                   () => cardDashboard1(
-                //                                     title: "Total  Silver ",
-                //                                     amount:
-                //                                         Utility.rupiahFormat(
-                //                                           controller
-                //                                               .totalSilver
-                //                                               .toString(),
-                //                                           '',
-                //                                         ),
-                //                                     icon: Iconsax.money_send5,
-                //                                   ),
-                //                                 ),
-                //                               ),
-                //                             ),
-                //                             Expanded(
-                //                               child: SizedBox(
-                //                                 child: Obx(
-                //                                   () => cardDashboard1(
-                //                                     title: "Total Gold",
-                //                                     amount:
-                //                                         Utility.rupiahFormat(
-                //                                           controller.totalGold
-                //                                               .toString(),
-                //                                           '',
-                //                                         ),
-                //                                     icon: Iconsax.money_send5,
-                //                                   ),
-                //                                 ),
-                //                               ),
-                //                             ),
-                //                           ],
-                //                         ),
-                //                       ),
-                //                     ),
-                //                     const SizedBox(height: 24),
-                //                     // TextLabell(
-                //                     //     text: controller.filterChart
-                //                     //         .where(
-                //                     //             (p0) => p0['is_active'] == true)
-                //                     //         .toList()
-                //                     //         .toString()),
-                //                     // TargetPenjualanSalesChart(),
-                //                     Obx(
-                //                       () =>
-                //                           controller.isLoadingGrafik.value ==
-                //                               true
-                //                           ? Container(
-                //                               width: MediaQuery.of(
-                //                                 context,
-                //                               ).size.width,
-                //                               height: 200,
-                //                               child: Column(
-                //                                 crossAxisAlignment:
-                //                                     CrossAxisAlignment.center,
-                //                                 mainAxisAlignment:
-                //                                     MainAxisAlignment.center,
-                //                                 children: [
-                //                                   CircularProgressIndicator(
-                //                                     color: Utility.baseColor,
-                //                                   ),
-                //                                   SizedBox(height: 10),
-                //                                   TextLabell(
-                //                                     text: "Memuat Data",
-                //                                   ),
-                //                                 ],
-                //                               ),
-                //                             )
-                //                           : controller.filterChart
-                //                                     .where(
-                //                                       (p0) =>
-                //                                           p0['is_active'] ==
-                //                                           true,
-                //                                     )
-                //                                     .toList()
-                //                                     .first['id'] ==
-                //                                 "target_penjualan"
-                //                           ? TargetPenjualanSalesChart()
-                //                           : controller.filterChart
-                //                                     .where(
-                //                                       (p0) =>
-                //                                           p0['is_active'] ==
-                //                                           true,
-                //                                     )
-                //                                     .toList()
-                //                                     .first['id'] ==
-                //                                 "piutang_penjualan"
-                //                           ? PenjualanPiutangChart()
-                //                           : piutangPenerimaanChart(),
-                //                     ),
-                //                   ],
-                //                   const SizedBox(height: 24),
-                //                   Obx(
-                //                     () =>
-                //                         controller.isLoadingTopBrand.value ==
-                //                             true
-                //                         ? SizedBox(
-                //                             width: MediaQuery.of(
-                //                               context,
-                //                             ).size.width,
-                //                             height: 200,
-                //                             child: Column(
-                //                               children: [
-                //                                 CircularProgressIndicator(
-                //                                   color: Utility.baseColor,
-                //                                 ),
-                //                                 const SizedBox(height: 10),
-                //                                 const TextLabell(
-                //                                   text: "Memuat Data",
-                //                                 ),
-                //                               ],
-                //                             ),
-                //                           )
-                //                         : Container(
-                //                             padding: const EdgeInsets.all(8),
-                //                             decoration: BoxDecoration(
-                //                               border: Border.all(
-                //                                 width: 1,
-                //                                 color: Utility.greyLight100,
-                //                               ),
-                //                               borderRadius:
-                //                                   BorderRadius.circular(8),
-                //                             ),
-                //                             child: Column(
-                //                               crossAxisAlignment:
-                //                                   CrossAxisAlignment.start,
-                //                               children: [
-                //                                 const Padding(
-                //                                   padding:
-                //                                       EdgeInsets.fromLTRB(
-                //                                         8.0,
-                //                                         8.0,
-                //                                         8.0,
-                //                                         0.0,
-                //                                       ),
-                //                                   child: TextLabell(
-                //                                     text:
-                //                                         "Top 5 Best Seller (Brand)",
-                //                                     weight: FontWeight.w500,
-                //                                     size: 16,
-                //                                   ),
-                //                                 ),
-                //                                 SfCircularChart(
-                //                                   series: <CircularSeries>[
-                //                                     // Renders doughnut chart
-                //                                     DoughnutSeries<
-                //                                       TopBrandModel,
-                //                                       String
-                //                                     >(
-                //                                       enableTooltip: true,
-                //                                       dataSource:
-                //                                           controller.topBrand,
-                //                                       pointColorMapper:
-                //                                           (
-                //                                             TopBrandModel
-                //                                             data,
-                //                                             _,
-                //                                           ) => data.color,
-                //                                       xValueMapper:
-                //                                           (
-                //                                             TopBrandModel
-                //                                             data,
-                //                                             _,
-                //                                           ) => data.nama,
-                //                                       yValueMapper:
-                //                                           (
-                //                                             TopBrandModel
-                //                                             data,
-                //                                             _,
-                //                                           ) => data.totalQty,
-
-                //                                       // Explode all the segments
-                //                                     ),
-                //                                   ],
-                //                                   tooltipBehavior:
-                //                                       _tooltipBehavior,
-                //                                 ),
-                //                                 Column(
-                //                                   children: List.generate(
-                //                                     controller
-                //                                         .topBrand
-                //                                         .length,
-                //                                     (index) {
-                //                                       var data = controller
-                //                                           .topBrand[index];
-
-                //                                       return Padding(
-                //                                         padding:
-                //                                             const EdgeInsets.only(
-                //                                               top: 20,
-                //                                               left: 8,
-                //                                               right: 8,
-                //                                             ),
-                //                                         child: Row(
-                //                                           children: [
-                //                                             Expanded(
-                //                                               flex: 5,
-                //                                               child: Container(
-                //                                                 width: 15,
-                //                                                 height: 15,
-                //                                                 decoration: BoxDecoration(
-                //                                                   color: data
-                //                                                       .color,
-                //                                                   borderRadius:
-                //                                                       BorderRadius.circular(
-                //                                                         5,
-                //                                                       ),
-                //                                                 ),
-                //                                               ),
-                //                                             ),
-                //                                             const SizedBox(
-                //                                               width: 10,
-                //                                             ),
-                //                                             Expanded(
-                //                                               flex: 60,
-                //                                               child:
-                //                                                   TextLabell(
-                //                                                     text: data
-                //                                                         .nama,
-                //                                                     size: 10,
-                //                                                   ),
-                //                                             ),
-                //                                             Expanded(
-                //                                               flex: 40,
-                //                                               child: TextLabell(
-                //                                                 align:
-                //                                                     TextAlign
-                //                                                         .right,
-                //                                                 text: helper
-                //                                                     .numberFormat(
-                //                                                       data.totalQty
-                //                                                           .toString(),
-                //                                                     )
-                //                                                     .toString(),
-                //                                                 size: 10,
-                //                                               ),
-                //                                             ),
-                //                                           ],
-                //                                         ),
-                //                                       );
-                //                                     },
-                //                                   ),
-                //                                 ),
-                //                                 const SizedBox(height: 8),
-                //                               ],
-                //                             ),
-                //                           ),
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //             const SizedBox(height: 5),
-                //             Padding(
-                //               padding: const EdgeInsets.only(
-                //                 left: 16,
-                //                 right: 16,
-                //               ),
-                //               child: BirthDayay(),
-                //             ),
-                //             SizedBox(height: Utility.large),
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -701,11 +269,8 @@ class BerandaView extends StatelessWidget {
               options: CarouselOptions(
                 height: 200.0, //
                 autoPlay: true, //
-                autoPlayInterval: const Duration(
-                  seconds: 3,
-                ), // Jeda tiap slide 3 detik
-                viewportFraction:
-                    1.0, // Supaya gambarnya full lebar (tidak ngintip kiri kanan)
+                autoPlayInterval: const Duration(seconds: 3),
+                viewportFraction: 1.0,
                 onPageChanged: (index, reason) {
                   controller.indexBanner.value = index;
                 },
@@ -722,180 +287,6 @@ class BerandaView extends StatelessWidget {
                 spacing: const EdgeInsets.fromLTRB(0.0, 8.0, 4.0, 0.0),
                 activeShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50.0),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget infoCard1() {
-    return CardCustom(
-      colorBg: Utility.baseColor2,
-      radiusBorder: Utility.borderStyle2,
-      widgetCardCustom: Padding(
-        padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 49,
-              child: InkWell(
-                // onTap: () {
-                //   DatePicker.showPicker(
-                //     Get.context!,
-                //     pickerModel: CustomMonthPicker(
-                //       minTime: DateTime(2020, 1, 1),
-                //       maxTime: DateTime(2050, 1, 1),
-                //       currentTime: DateTime.now(),
-                //     ),
-                //     // onConfirm: (time) {
-                //     //   if (time != null) {
-                //     //     // print("$time");
-                //     //     setState(() {
-                //     //       controller.periodeDateSelected.value = time;
-                //     //       controller.periodeDateSelected.refresh();
-                //     //       controller.prosesDateNow();
-                //     //     });
-                //     //   }
-                //     // },
-                //   );
-                // },
-                child: IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 15,
-                        child: Icon(
-                          Iconsax.calendar5,
-                          color: Utility.primaryDefault,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 70,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Periode",
-                                style: TextStyle(
-                                  color: Utility.nonAktif,
-                                  fontSize: Utility.normal,
-                                ),
-                              ),
-                              Text(
-                                "Periode",
-                                style: TextStyle(
-                                  color: Utility.baseColor1,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 15,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Icon(
-                            Iconsax.arrow_down_1,
-                            size: 18,
-                            color: Utility.nonAktif,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 10,
-              child: Container(
-                height: 30,
-                alignment: Alignment.center,
-                child: Container(
-                  width: 1.5,
-                  color: Color.fromARGB(24, 0, 22, 103),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 49,
-              child: InkWell(
-                // onTap: () {
-                //   // print(controller.kodeCabangSelected.value);
-                //   GlobalBottomSheet().buttomSheetGlobal(
-                //     controller.listCabang,
-                //     "Pilih Cabang",
-                //     "pilih_cabang",
-                //     controller.kodeCabangSelected.value,
-                //   );
-                //   if (controller.listCabang.length > 1) {}
-                // },
-                child: IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 15,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 25),
-                          child: Icon(
-                            Iconsax.buildings_25,
-                            color: Utility.primaryDefault,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 70,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Cabang",
-                                style: TextStyle(
-                                  color: Utility.nonAktif,
-                                  fontSize: Utility.normal,
-                                ),
-                              ),
-                              RichText(
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                strutStyle: StrutStyle(fontSize: 11.0),
-                                text: TextSpan(
-                                  style: TextStyle(
-                                    color: Utility.baseColor1,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  text: "Cabang Dika",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 15,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Icon(
-                            Iconsax.arrow_down_1,
-                            size: 18,
-                            color: Utility.nonAktif,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ),
             ),
@@ -924,33 +315,6 @@ class BerandaView extends StatelessWidget {
                     /// Menu Line 1
                     menuLine1(),
                     SizedBox(height: Utility.normal),
-                    // !controller.showLineMenu.value ? SizedBox() : menuLine2(),
-
-                    /// Menu Line 2
-                    // menuLine2(),
-
-                    // SizedBox(height: Utility.normal),
-                    // InkWell(
-                    //   onTap: () {
-                    //     controller.showLineMenu.value =
-                    //         !controller.showLineMenu.value;
-                    //     controller.showLineMenu.refresh();
-                    //   },
-                    //   child: SizedBox(
-                    //     width: 200,
-                    //     child: Center(
-                    //       child: !controller.showLineMenu.value
-                    //           ? Icon(
-                    //               Iconsax.arrow_down_1,
-                    //               size: 18,
-                    //             )
-                    //           : Icon(
-                    //               Iconsax.arrow_up_2,
-                    //               size: 18,
-                    //             ),
-                    //     ),
-                    //   ),
-                    // )
                   ],
                 ),
               ),
@@ -965,56 +329,12 @@ class BerandaView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 25),
+        const SizedBox(height: 18),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              flex: 4,
-              child: InkWell(
-                // onTap: () {
-                //   controller.routeMenu("Order Penjualan");
-                // },
-                child: Column(
-                  children: [
-                    Stack(
-                      alignment: AlignmentDirectional.center,
-                      children: [
-                        Container(
-                          width: 48,
-                          height: 48,
-                          alignment: Alignment
-                              .center, // 🔥 Ini kunci agar gambar otomatis persis di tengah
-                          decoration: BoxDecoration(
-                            color: Utility.baseColor,
-                            borderRadius: Utility
-                                .borderStyle5, // Pastikan variabel ini ada di utility Mas Dika
-                          ),
-                          child: Image.asset(
-                            'assets/order.png',
-                            width: 28,
-                            height: 28,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "Dipesan \nMakanan",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: Utility.normal,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            Expanded(
-              flex: 4,
+              flex: 8,
               child: InkWell(
                 // onTap: () {
                 //   controller.routeMenu("Order Penjualan");
@@ -1030,12 +350,53 @@ class BerandaView extends StatelessWidget {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: Utility.baseColor,
-                            borderRadius: Utility.borderStyle5,
+                            borderRadius: Utility.borderStyle4,
                           ),
                           child: Image.asset(
                             'assets/order.png',
-                            width: 28,
-                            height: 28,
+                            width: 45,
+                            height: 45,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "Dipesan \n Makanan",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: Utility.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 7,
+              child: InkWell(
+                // onTap: () {
+                //   controller.routeMenu("Order Penjualan");
+                // },
+                child: Column(
+                  children: [
+                    Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Utility.baseColor,
+                            borderRadius: Utility.borderStyle4,
+                          ),
+                          child: Image.asset(
+                            'assets/best_seller.png',
+                            width: 55,
+                            height: 55,
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -1054,7 +415,90 @@ class BerandaView extends StatelessWidget {
                 ),
               ),
             ),
-            const Spacer(flex: 8),
+
+            Expanded(
+              flex: 8,
+              child: InkWell(
+                // onTap: () {
+                //   controller.routeMenu("Order Penjualan");
+                // },
+                child: Column(
+                  children: [
+                    Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Utility.baseColor,
+                            borderRadius: Utility.borderStyle4,
+                          ),
+                          child: Image.asset(
+                            'assets/promo.png',
+                            width: 55,
+                            height: 55,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "Promo",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: Utility.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            Expanded(
+              flex: 8,
+              child: InkWell(
+                // onTap: () {
+                //   controller.routeMenu("Order Penjualan");
+                // },
+                child: Column(
+                  children: [
+                    Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Utility.baseColor,
+                            borderRadius: Utility.borderStyle4,
+                          ),
+                          child: Image.asset(
+                            'assets/delivery.png',
+                            width: 55,
+                            height: 55,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "Lacak \n Pesanan",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: Utility.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
         SizedBox(height: 6),
@@ -1245,88 +689,184 @@ class BerandaView extends StatelessWidget {
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: const Text(
-  //         "Food Delivery 🍔",
-  //         style: TextStyle(fontWeight: FontWeight.bold),
-  //       ),
-  //       backgroundColor: Utility.baseColor,
-  //     ),
-  //     backgroundColor: Colors.grey[100],
-  //     body: Obx(() {
-  //       if (foodController.listmakanan.isEmpty) {
-  //         return const Center(child: CircularProgressIndicator());
-  //       }
+  Widget cardRekomendasiMakanan(FoodModelRekomen data) {
+    return Container(
+      width: 160,
+      margin: const EdgeInsets.only(right: 12.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 5,
+            spreadRadius: 1,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
 
-  //       return ListView.builder(
-  //         itemCount: foodController.listmakanan.length,
-  //         itemBuilder: (context, index) {
-  //           var menu = foodController.listmakanan[index];
+            child: Image.asset(
+              data.gambarRekomen,
+              height: 120,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
 
-  //           return Card(
-  //             margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-  //             elevation: 3,
-  //             shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.circular(15),
-  //             ),
-  //             child: ListTile(
-  //               contentPadding: const EdgeInsets.all(10),
-  //               leading: ClipRRect(
-  //                 borderRadius: BorderRadius.circular(10),
-  //                 child: Image.network(
-  //                   menu.gambar,
-  //                   width: 60,
-  //                   height: 60,
-  //                   fit: BoxFit.cover,
-  //                 ),
-  //               ),
-  //               title: Text(
-  //                 menu.nama,
-  //                 style: const TextStyle(
-  //                   fontWeight: FontWeight.bold,
-  //                   fontSize: 16,
-  //                 ),
-  //               ),
-  //               subtitle: Padding(
-  //                 padding: const EdgeInsets.only(top: 8.0),
-  //                 child: Text(
-  //                   "Rp ${globalC.FormatNumber_(menu.harga.toInt())}\n⭐ ${menu.rating}",
-  //                   style: TextStyle(
-  //                     color: Colors.orange[800],
-  //                     fontWeight: FontWeight.w600,
-  //                   ),
-  //                 ),
-  //               ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  data.namarekomen,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "Rp ${globalC.FormatNumber_(data.hargarekomen.toInt())}",
+                  style: TextStyle(
+                    color: Utility.baseColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-  //               trailing: ElevatedButton(
-  //                 style: ElevatedButton.styleFrom(
-  //                   backgroundColor: Colors.orange,
-  //                   shape: RoundedRectangleBorder(
-  //                     borderRadius: BorderRadius.circular(10),
-  //                   ),
-  //                 ),
-  //                 onPressed: () {
-  //                   Get.snackbar(
-  //                     "Masuk Keranjang 🛒",
-  //                     "${menu.nama} berhasil ditambahkan!",
-  //                     snackPosition: SnackPosition.BOTTOM,
-  //                     backgroundColor: Colors.green,
-  //                     colorText: Colors.white,
-  //                   );
-  //                 },
-  //                 child: const Text(
-  //                   "Beli",
-  //                   style: TextStyle(color: Colors.white),
-  //                 ),
-  //               ),
-  //             ),
-  //           );
-  //         },
-  //       );
-  //     }),
-  //   );
-  // }
+  Widget cardRestoTerdekat(PenjualModel data) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.15),
+            blurRadius: 8,
+            spreadRadius: 1,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // GAMBAR & RATING
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+            child: Stack(
+              children: [
+                Image.asset(
+                  data.gambar,
+                  height: 150,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+                Positioned(
+                  top: 12,
+                  right: 12,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black12, blurRadius: 4),
+                      ],
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.star, size: 14, color: Colors.orange),
+                        SizedBox(width: 4),
+                        Text(
+                          "4.8",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Nama Toko
+                Text(
+                  data.toko,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+
+                const SizedBox(height: 6),
+
+                // Alamat
+                Row(
+                  children: [
+                    Icon(Icons.location_on, size: 14, color: Colors.grey[500]),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        data.alamat,
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                          color: Colors.grey[600],
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 12),
+                Divider(height: 1, color: Colors.grey[200]),
+                const SizedBox(height: 12),
+
+                Row(
+                  children: [
+                    Icon(Icons.access_time, size: 14, color: Colors.grey[500]),
+                    const SizedBox(width: 4),
+                    Text(
+                      "15 mnt",
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

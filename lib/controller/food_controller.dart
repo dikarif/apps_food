@@ -4,6 +4,7 @@ import 'package:get/state_manager.dart';
 
 class FoodController extends GetxController {
   var listmakanan = <FoodModel>[].obs;
+  var lismakananarekomen = <FoodModelRekomen>[].obs;
 
   @override
   void onInit() {
@@ -13,19 +14,40 @@ class FoodController extends GetxController {
 
   void loadDataDummy() {
     listmakanan.assignAll([
-      FoodModel(
-        nama: "Burger Sapi",
-        gambar:
-            "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=200&q=80",
-        harga: 35000,
-        rating: 4.8,
+      FoodModel(nama: "Burger Sapi", harga: 35000, rating: 4.8, gambar: ""),
+      FoodModel(nama: "Ayam Penyet", harga: 20000, rating: 4.5, gambar: ""),
+    ]);
+
+    lismakananarekomen.assignAll([
+      FoodModelRekomen(
+        namarekomen: "Burger Sapi",
+        hargarekomen: 35000,
+        ratingrekomen: 4.8,
+        gambarRekomen: 'assets/burger.jpg',
       ),
-      FoodModel(
-        nama: "Ayam Penyet",
-        gambar:
-            "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=200&q=80",
-        harga: 20000,
-        rating: 4.5,
+      FoodModelRekomen(
+        namarekomen: "Ayam Penyet",
+        hargarekomen: 20000,
+        ratingrekomen: 4.5,
+        gambarRekomen: 'assets/ayam.jpg',
+      ),
+      FoodModelRekomen(
+        namarekomen: "Pizza",
+        hargarekomen: 60000,
+        ratingrekomen: 4.5,
+        gambarRekomen: 'assets/pizza.jpg',
+      ),
+      FoodModelRekomen(
+        namarekomen: "Mie Goreng",
+        hargarekomen: 20000,
+        ratingrekomen: 4.5,
+        gambarRekomen: 'assets/mie.jpg',
+      ),
+      FoodModelRekomen(
+        namarekomen: "Siomay",
+        hargarekomen: 10000,
+        ratingrekomen: 4.5,
+        gambarRekomen: 'assets/siomay.jpg',
       ),
     ]);
   }
