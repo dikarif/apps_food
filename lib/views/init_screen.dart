@@ -1,4 +1,5 @@
 import 'package:apps_food/views/beranda_view.dart';
+import 'package:apps_food/views/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -23,10 +24,11 @@ class _InitScreenState extends State<InitScreen> {
         color: Colors.white,
         child: const Center(child: Text("Riwayat Transaksi")), //sementara
       ),
-      Container(
-        color: Colors.white,
-        child: const Center(child: Text("Halaman Profile")), //sementara
-      ),
+      // Container(
+      //   color: Colors.white,
+      //   child: const Center(child: Text("Halaman Profile")), //sementara
+      // ),
+      ProfileView(),
     ];
   }
 
@@ -82,7 +84,6 @@ class _InitScreenState extends State<InitScreen> {
   Widget build(BuildContext context) {
     return Obx(
       () => PersistentTabView(
-        // 1. 'context' sebagai argumen pertama sudah dihapus.
         context,
         controller: controller.tabPersistantController.value,
         screens: _buildScreens(),
@@ -97,7 +98,6 @@ class _InitScreenState extends State<InitScreen> {
         navBarHeight: 60.0,
         padding: EdgeInsets.all(8),
 
-        // 2. Nama parameter diperbarui.
         hideNavigationBarWhenKeyboardAppears: true,
 
         decoration: const NavBarDecoration(
@@ -114,7 +114,7 @@ class _InitScreenState extends State<InitScreen> {
           ],
           colorBehindNavBar: Colors.white,
         ),
-        // 3. Menerapkan perbaikan layout dari pertanyaan sebelumnya.
+
         navBarStyle: NavBarStyle.style6,
       ),
     );

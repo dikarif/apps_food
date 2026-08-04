@@ -172,7 +172,7 @@ class BerandaView extends StatelessWidget {
   Widget pencarianData() {
     return CardCustom(
       colorBg: Colors.white,
-      radiusBorder: Utility.borderStyle3,
+      radiusBorder: Utility.borderStyle3, 
       borderColor: Utility.infoDark,
       widgetCardCustom: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

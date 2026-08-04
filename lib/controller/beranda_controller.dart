@@ -114,23 +114,6 @@ class BerandaController extends GetxController {
   //   fetchTopBrand();
   // }
 
-  var filterChart = [
-    {
-      'id': 'target_penjualan',
-      'name': 'Target VS Penjualan',
-      'is_active:': true,
-    },
-    // {
-    //   'id': 'piutang_penjualan',
-    //   'name': 'Penjualan vs Piutang',
-    //   'is_active:': false
-    // },
-    {
-      'id': 'piutang_penerimaan',
-      'name': 'Piutang Vs Penerimaan',
-      'is_active:': false,
-    },
-  ].obs;
 
   // void prosesInformasiUser() {
   //   var dataInformasiUser = AppData.informasiLoginUser;
