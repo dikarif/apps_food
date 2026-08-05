@@ -14,8 +14,36 @@ class FoodController extends GetxController {
 
   void loadDataDummy() {
     listmakanan.assignAll([
-      FoodModel(nama: "Burger Sapi", harga: 35000, rating: 4.8, gambar: ""),
-      FoodModel(nama: "Ayam Penyet", harga: 20000, rating: 4.5, gambar: ""),
+      FoodModel(
+        nama: "Burger Sapi",
+        harga: 35000,
+        rating: 4.8,
+        gambar: 'assets/burger.jpg',
+      ),
+      FoodModel(
+        nama: "Ayam Penyet",
+        harga: 20000,
+        rating: 4.5,
+        gambar: 'assets/ayam.jpg',
+      ),
+      FoodModel(
+        nama: "Pizza",
+        harga: 60000,
+        rating: 4.5,
+        gambar: 'assets/pizza.jpg',
+      ),
+      FoodModel(
+        nama: "Mie Goreng",
+        harga: 20000,
+        rating: 4.5,
+        gambar: 'assets/mie.jpg',
+      ),
+      FoodModel(
+        nama: "Siomay",
+        harga: 10000,
+        rating: 4.5,
+        gambar: 'assets/siomay.jpg',
+      ),
     ]);
 
     lismakananarekomen.assignAll([

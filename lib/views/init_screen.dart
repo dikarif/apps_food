@@ -1,5 +1,5 @@
 import 'package:apps_food/views/beranda_view.dart';
-import 'package:apps_food/views/profile_view.dart';
+import 'package:apps_food/views/profil/profil_main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';

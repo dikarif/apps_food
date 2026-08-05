@@ -12,7 +12,6 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:new_version_plus/new_version_plus.dart';
@@ -172,7 +171,7 @@ class BerandaView extends StatelessWidget {
   Widget pencarianData() {
     return CardCustom(
       colorBg: Colors.white,
-      radiusBorder: Utility.borderStyle3, 
+      radiusBorder: Utility.borderStyle3,
       borderColor: Utility.infoDark,
       widgetCardCustom: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,9 +335,9 @@ class BerandaView extends StatelessWidget {
             Expanded(
               flex: 8,
               child: InkWell(
-                // onTap: () {
-                //   controller.routeMenu("Order Penjualan");
-                // },
+                onTap: () {
+                  controller.routeMenu("Order");
+                },
                 child: Column(
                   children: [
                     Stack(
@@ -363,7 +362,7 @@ class BerandaView extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      "Dipesan \n Makanan",
+                      "Order \n Makanan & Minuman",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
