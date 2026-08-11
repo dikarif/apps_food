@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:apps_food/views/main_dashboard.dart';
 import 'package:get/get.dart';
 import 'package:apps_food/views/splash_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
   // runApp(const MyApp());
   // runApp(GetMaterialApp(debugShowCheckedModeBanner: false, home: InitScreen()));
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+
   runApp(
     GetMaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen()),
   );
