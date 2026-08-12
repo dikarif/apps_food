@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class FoodController extends GetxController {
   // var listmakanan = <FoodModel>[].obs;
   var listmakanan = [].obs;
-  var lismakananarekomen = <FoodModelRekomen>[].obs;
+
   var isLoading = true.obs;
 
   @override

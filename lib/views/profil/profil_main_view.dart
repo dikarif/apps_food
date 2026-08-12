@@ -1,10 +1,10 @@
 import 'package:apps_food/controller/beranda_controller.dart';
 import 'package:apps_food/controller/main_dashboard_controller.dart';
-import 'package:apps_food/models/penjual_models.dart';
+import 'package:apps_food/models/toko_models.dart';
 import 'package:flutter/material.dart';
 import 'package:apps_food/models/food_models.dart';
 import 'package:apps_food/controller/food_controller.dart';
-import 'package:apps_food/controller/penjual_controller.dart';
+import 'package:apps_food/controller/toko_controller.dart';
 import 'package:apps_food/utils/widget/card_custom.dart';
 import 'package:apps_food/controller/global_controller.dart';
 import 'package:apps_food/utils/utility.dart';

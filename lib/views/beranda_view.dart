@@ -1,13 +1,14 @@
 import 'package:apps_food/controller/beranda_controller.dart';
 import 'package:apps_food/controller/main_dashboard_controller.dart';
-import 'package:apps_food/models/penjual_models.dart';
+import 'package:apps_food/models/toko_models.dart';
 import 'package:flutter/material.dart';
 import 'package:apps_food/models/food_models.dart';
 import 'package:apps_food/controller/food_controller.dart';
-import 'package:apps_food/controller/penjual_controller.dart';
+import 'package:apps_food/controller/toko_controller.dart';
 import 'package:apps_food/utils/widget/card_custom.dart';
 import 'package:apps_food/controller/global_controller.dart';
 import 'package:apps_food/utils/utility.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -105,11 +106,10 @@ class BerandaView extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 12.0,
                                 ),
-                                itemCount:
-                                    foodController.lismakananarekomen.length,
+                                itemCount: controller.lismakananarekomen.length,
                                 itemBuilder: (context, index) {
                                   return cardRekomendasiMakanan(
-                                    foodController.lismakananarekomen[index],
+                                    controller.lismakananarekomen[index],
                                   );
                                 },
                               ),
@@ -744,128 +744,154 @@ class BerandaView extends StatelessWidget {
     );
   }
 
-  Widget cardRestoTerdekat(PenjualModel data) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.15),
-            blurRadius: 8,
-            spreadRadius: 1,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // GAMBAR & RATING
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Stack(
-              children: [
-                Image.asset(
-                  data.gambar,
-                  height: 150,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-                Positioned(
-                  top: 12,
-                  right: 12,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black12, blurRadius: 4),
-                      ],
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.star, size: 14, color: Colors.orange),
-                        SizedBox(width: 4),
-                        Text(
-                          "4.8",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+  Widget cardRestoTerdekat(TokoModel data) {
+    return Obx(() {
+      final isReady = globalC.isLocationReady.value;
+      String teksWaktu = '- mnt';
+      if (isReady) {
+        double distanceInMeters = Geolocator.distanceBetween(
+          globalC.userLat.value,
+          globalC.userLong.value,
+          double.parse(data.latitude.toString()),
+          double.parse(data.longitude.toString()),
+        );
+
+        double distanceInKm = distanceInMeters / 1000;
+        int estimasi = (distanceInKm * 3).round(); // Asumsi 1 KM = 3 menit
+        teksWaktu = '$estimasi mnt';
+      }
+
+      return Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.15),
+              blurRadius: 8,
+              spreadRadius: 1,
+              offset: const Offset(0, 2),
             ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Nama Toko
-                Text(
-                  data.toko,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Colors.black87,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(12),
+              ),
+              child: Stack(
+                children: [
+                  Image.asset(
+                    data.gambar,
+                    height: 150,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-
-                const SizedBox(height: 6),
-
-                // Alamat
-                Row(
-                  children: [
-                    Icon(Icons.location_on, size: 14, color: Colors.grey[500]),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        data.alamat,
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 13,
-                          color: Colors.grey[600],
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [
+                          BoxShadow(color: Colors.black12, blurRadius: 4),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.star, size: 14, color: Colors.orange),
+                          SizedBox(width: 4),
+                          Text(
+                            data.rating.toString(),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-
-                const SizedBox(height: 12),
-                Divider(height: 1, color: Colors.grey[200]),
-                const SizedBox(height: 12),
-
-                Row(
-                  children: [
-                    Icon(Icons.access_time, size: 14, color: Colors.grey[500]),
-                    const SizedBox(width: 4),
-                    Text(
-                      "15 mnt",
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Nama Toko
+                  Text(
+                    data.nama,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.black87,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  // Alamat
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.location_on,
+                        size: 14,
+                        color: Colors.grey[500],
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          data.alamat,
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 13,
+                            color: Colors.grey[600],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 12),
+                  Divider(height: 1, color: Colors.grey[200]),
+                  const SizedBox(height: 12),
+
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.access_time,
+                        size: 14,
+                        color: Colors.grey[500],
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        teksWaktu,
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

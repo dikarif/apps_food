@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:apps_food/controller/food_controller.dart';
+import 'package:apps_food/controller/global_controller.dart';
+import 'package:apps_food/service/food_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -44,6 +47,8 @@ class BerandaController extends GetxController {
   // var targetPiutangList = <GrafikDashboardModel>[].obs;
   var isStatusProses = false;
 
+  var lismakananarekomen = [].obs;
+
   var menulaporan = [
     {"name": "Order Penjualan", "icon": "", 'page': ''},
     {"name": "Cek Stok", "icon": "", 'page': ''},
@@ -86,22 +91,15 @@ class BerandaController extends GetxController {
   PageController menuController = PageController(initialPage: 0);
   PageController informasiController = PageController(initialPage: 0);
 
-  Future<void> startLoad() async {
-    // void startLoad() {
-    // prosesDateNow();
-    // prosesInformasiUser();
-    // prosesInformasiCabang();
-    // prosesInformasiSysData();
-    // getStatusAktif();
-  }
+  final FoodController foodController = Get.put(FoodController());
+  final GlobalController globalController = Get.put(GlobalController());
 
-  void UpdateDashboard() {
-    // informasiDashboard1();
-    // infromasiGrafik();
-    // fetchTopBrand();
-    // getUlangTahun();
+  @override
+  void onInit() {
+    super.onInit();
 
-    print("update Dashboard");
+    globalController.getUserLocation();
+    getMenuRekomen();
   }
 
   void routeMenu(menu) {
@@ -109,5 +107,23 @@ class BerandaController extends GetxController {
     if (menu == "Order") {
       Get.to(OrderMainView());
     }
+  }
+
+  void getMenuRekomen() async {
+    try {
+      // isLoading(true);
+      var data = await FoodService().getMenuRekomen();
+      lismakananarekomen.assignAll(data);
+      print('lismakananarekomen ${lismakananarekomen}');
+    } catch (e) {
+      Get.snackbar(
+        'Gagal',
+        'Tidak dapat mengambil data: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+    //  finally {
+    //   isLoading(false);
+    // }
   }
 }

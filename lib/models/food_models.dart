@@ -17,12 +17,12 @@ class FoodModel {
 
   factory FoodModel.fromJson(Map<String, dynamic> json) {
     return FoodModel(
-      idbarang: json['idbarang'],
-      idtoko: json['idtoko'],
+      idbarang: BigInt.parse(json['idbarang'].toString()),
+      idtoko: BigInt.parse(json['idtoko'].toString()),
       nama: json['nama'],
-      harga: json['harga'],
-      rating: json['rating'],
-      gambar: json['gambar'],
+      harga: double.parse(json['harga'].toString()),
+      rating: double.parse(json['rating'].toString()),
+      gambar: 'assets/' + json['gambar'],
     );
   }
 }
@@ -46,12 +46,12 @@ class FoodModelRekomen {
 
   factory FoodModelRekomen.fromJson(Map<String, dynamic> json) {
     return FoodModelRekomen(
-      idbarang: json['idbarang'],
-      idtoko: json['idtoko'],
+      idbarang: BigInt.parse(json['idbarang'].toString()),
+      idtoko: BigInt.parse(json['idtoko'].toString()),
       namarekomen: json['nama'],
-      hargarekomen: json['harga'],
-      ratingrekomen: json['rating'],
-      gambarRekomen: json['gambar'],
+      hargarekomen: double.parse(json['harga'].toString()),
+      ratingrekomen: double.parse(json['rating'].toString()),
+      gambarRekomen: 'assets/' + json['gambar'],
     );
   }
 }
