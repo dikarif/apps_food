@@ -18,6 +18,7 @@ class FoodController extends GetxController {
   }
 
   void getMenu() async {
+    print('masuk kesini');
     try {
       isLoading(true);
       var data = await FoodService().getMenu();

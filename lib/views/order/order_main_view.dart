@@ -15,7 +15,7 @@ class OrderMainView extends StatelessWidget {
       backgroundColor: Utility.baseColor2,
       body: GridView.builder(
         padding: const EdgeInsets.all(12.0),
-        // Mengatur Grid menjadi 2 kolom
+
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 12.0,

@@ -10,21 +10,14 @@ import 'package:apps_food/controller/global_controller.dart';
 import 'package:apps_food/utils/utility.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:intl/intl.dart';
-import 'package:new_version_plus/new_version_plus.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BerandaView extends StatelessWidget {
-  final FoodController foodController = Get.put(FoodController());
   final penjualcontroller = Get.put(PenjualController());
   final globalC = Get.put(GlobalController());
   final controller = Get.put(BerandaController());

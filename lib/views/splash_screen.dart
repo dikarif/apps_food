@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Sesuaikan warna background dengan logo
+      backgroundColor: Colors.white, 
       body: Center(
         child: Image.asset(
           'assets/Dipesan.png',
