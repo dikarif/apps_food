@@ -1,11 +1,14 @@
+import 'dart:ffi';
+
 import 'package:apps_food/models/food_models.dart';
 import 'package:apps_food/models/toko_models.dart';
 import 'package:apps_food/service/toko_service.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 
-class PenjualController extends GetxController {
+class TokoController extends GetxController {
   var listtoko = <TokoModel>[].obs;
+  var listtokoDetail = [].obs;
   var isLoading = true.obs;
 
   @override
@@ -21,6 +24,23 @@ class PenjualController extends GetxController {
       print('ini listokot ${listtoko}');
       var data = await TokoService().getToko();
       listtoko.assignAll(data);
+    } catch (e) {
+      Get.snackbar(
+        'Gagal',
+        'Tidak dapat mengambil data: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  void getTokoDetail(BigInt id) async {
+    try {
+      isLoading(true);
+      var data = await TokoService().getTokoDetail();
+      listtokoDetail.assignAll(data);
+      print('ini listtokoDetail ${listtokoDetail}');
     } catch (e) {
       Get.snackbar(
         'Gagal',

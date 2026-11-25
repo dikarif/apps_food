@@ -1,3 +1,5 @@
+import 'package:apps_food/controller/toko_controller.dart';
+import 'package:apps_food/views/order/order_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:apps_food/utils/utility.dart';
 import 'package:apps_food/controller/food_controller.dart';
@@ -7,6 +9,7 @@ import 'package:apps_food/controller/global_controller.dart';
 
 class OrderMainView extends StatelessWidget {
   final FoodController foodController = Get.put(FoodController());
+  final TokoController tokoControler = Get.put(TokoController());
   final globalC = Get.put(GlobalController());
 
   @override
@@ -34,7 +37,8 @@ class OrderMainView extends StatelessWidget {
     return SafeArea(
       child: InkWell(
         onTap: () {
-          print("Menu diklik!");
+          print('di klik ${data.idtoko}');
+          Get.to(() => OrderDetailView(), arguments: data.idtoko);
         },
         borderRadius: BorderRadius.circular(12),
         child: Container(

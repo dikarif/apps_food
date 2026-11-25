@@ -18,7 +18,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BerandaView extends StatelessWidget {
-  final penjualcontroller = Get.put(PenjualController());
+  final penjualcontroller = Get.put(TokoController());
   final globalC = Get.put(GlobalController());
   final controller = Get.put(BerandaController());
 

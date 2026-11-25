@@ -33,4 +33,32 @@ class TokoService {
       throw Exception(e.toString());
     }
   }
+
+  Future<List<TokoModel>> getTokoDetail({String? idtoko}) async {
+    try {
+      String url = '$baseUrl/toko/detail';
+
+      if (idtoko != null && idtoko.isNotEmpty) {
+        url += '?id=$idtoko';
+      }
+
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> decodedData = json.decode(response.body);
+
+        if (decodedData['status'] == 'success') {
+          List<dynamic> rawData = decodedData['data'];
+
+          return rawData.map((json) => TokoModel.fromJson(json)).toList();
+        } else {
+          throw Exception(decodedData['message'] ?? 'Gagal memproses data');
+        }
+      } else {
+        throw Exception('Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error Fetch API Menu: $e');
+      throw Exception(e.toString());
+    }
+  }
 }

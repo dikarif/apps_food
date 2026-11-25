@@ -16,7 +16,7 @@ class FoodService {
       }
 
       print('ini url ${url}');
-  
+
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final Map<String, dynamic> decodedData = json.decode(response.body);

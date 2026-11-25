@@ -31,7 +31,7 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileState extends State<ProfileView> {
   final FoodController foodController = Get.put(FoodController());
-  final penjualcontroller = Get.put(PenjualController());
+  final penjualcontroller = Get.put(TokoController());
   final globalC = Get.put(GlobalController());
   final controller = Get.put(BerandaController());
 

@@ -14,32 +14,14 @@ import 'package:apps_food/views/order/order_main_view.dart';
 
 class OrderDetailController extends GetxController {
   var showLineMenu = false.obs;
-  var salesman = [].obs;
-  var salesmanCode = "".obs;
-  var salesManName = "".obs;
   var username = "".obs;
   var emailUser = "".obs;
-  var kodeCabangSelected = "".obs;
-  var namaCabangSelected = "".obs;
-  var alamat1CabangSelected = "".obs;
-  var periodeTerpilih = "".obs;
-  var periodeDateSelected = DateTime.now().obs;
-  var listCabang = [].obs;
   var catatanCtr = TextEditingController();
   var absenType = 0.obs;
-  var targetSales = "0.0".obs;
-  var penjualan = "0.0".obs;
-  var penerimaan = "0.0".obs;
-  var piutang = "0.0".obs;
-  var totalGold = "0.0".obs;
-  var totalSilver = "0.0".obs;
   var indexBanner = 0.obs;
   var heightPageView = 0.0.obs;
 
   var isActiveFilterChart = false.obs;
-  var salesmanCodeDefault = "".obs;
-  var salesManNameDefault = "".obs;
-  var ulangtahun = [].obs;
 
   var isStatusProses = false;
 
@@ -53,19 +35,6 @@ class OrderDetailController extends GetxController {
   var isLoadingTopBrand = true.obs;
   RxInt llimitSales = 10.obs;
 
-  var dataColor = [
-    Colors.red,
-    Colors.green,
-    Colors.purple,
-    Colors.amber,
-    Colors.blue,
-  ];
-
-  final List<String> listBanner = [
-    'assets/mk_dashboard.png',
-    'assets/mk_dashboard2.png',
-  ];
-
   final FoodController foodController = Get.put(FoodController());
   final GlobalController globalController = Get.put(GlobalController());
 
@@ -74,7 +43,7 @@ class OrderDetailController extends GetxController {
     super.onInit();
 
     globalController.getUserLocation();
-    getMenuRekomen();
+    // getMenuRekomen();
   }
 
   void routeMenu(menu) {
@@ -84,21 +53,6 @@ class OrderDetailController extends GetxController {
     }
   }
 
-  void getMenuRekomen() async {
-    try {
-      // isLoading(true);
-      var data = await FoodService().getMenuRekomen();
-      lismakananarekomen.assignAll(data);
-      print('lismakananarekomen ${lismakananarekomen}');
-    } catch (e) {
-      Get.snackbar(
-        'Gagal',
-        'Tidak dapat mengambil data: $e',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    }
-    //  finally {
-    //   isLoading(false);
-    // }
+ 
+  
   }
-}
